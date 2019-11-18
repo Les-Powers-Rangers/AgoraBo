@@ -13,7 +13,7 @@
 
 	$idPegiModif = -1;		// positionné si demande de modification
 	$notification = 'rien';	// pour notifier la mise à jour dans la vue
-
+	$idPegiNotif = -1;
 	// selon l'action demandée on réalise l'action 
 	switch($action){
 
@@ -49,6 +49,14 @@
 		
 	// l' affichage des pegis se fait dans tous les cas	
 	$tbPegis  = $db->getLesPegis();		
-	require 'vue/v_lesPegis.php';
+	//require 'vue/v_lesPegis.php';
+
+	echo $twig->render('lesPegis.html.twig', array(
+		'menuActif' => 'Jeux',
+		'tbPegis' => $tbPegis,
+		'idPegiModif' => $idPegiModif,
+		'idPegiNotif' => $idPegiNotif,
+		'notification' => $notification
+	));
 
 	?>
