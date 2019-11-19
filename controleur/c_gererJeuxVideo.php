@@ -13,6 +13,7 @@
 
 	$refJeuModif = -1;		// positionné si demande de modification
 	$notification = 'rien';	// pour notifier la mise à jour dans la vue
+	$refJeuNotif = -1;
 
 	// selon l'action demandée on réalise l'action 
 	switch($action){
@@ -49,10 +50,24 @@
 		
 	// l' affichage des jeux vidéo se fait dans tous les cas	
 	$tbJeuxVideo  = $db->getLesJeuxVideo();
+
 	$tbGenres  = $db->getLesGenres();
 	$tbPlateformes  = $db->getLesPlateformes();
 	$tbPegis  = $db->getLesPegis();
 	$tbMarques  = $db->getLesMarques();
-	require 'vue/v_lesJeuxVideo.php';
+
+
+	//require 'vue/v_lesJeuxVideo.php';
+	echo $twig->render('lesJeux.html.twig',array(
+		'menuActif' => 'Jeux',
+		'tbJeuxVideo' => $tbJeuxVideo,
+		'tbGenres'  => $tbGenres,
+		'tbPlateformes'  => $tbPlateformes,
+		'tbPegis'  => $tbPegis,
+		'tbMarques'  => $tbMarques,
+		'refJeuNotif'=> $refJeuNotif,
+		'refJeuModif'=> $refJeuModif,
+		'notification' => $notification,
+	))
 
 	?>
