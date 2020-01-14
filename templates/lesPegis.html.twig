@@ -21,7 +21,7 @@
                     <tbody>
                     <!-- formulaire pour ajouter un nouveau pegi-->
                     <tr>
-                        <form action="index.php?uc=gererPegis" method="post">
+                        <form action="{{ path('pegis_ajouter') }}" method="post">
                             <td>Nouveau</td>
                             <td>
                                 <input type="text" id="txtLibPegi" name="txtLibPegi" size="3" required minlength="1"
@@ -57,15 +57,18 @@
                                 </td>
                                 <td>
                                     {% if notification != 'rien' and pegi.identifiant == idPegiNotif %}
-                                        <button class="btn btn-success btn-xs"><i
+                                        <button class="btn btn-success btn-xs"
+                                                formaction="{{ path('pegis_afficher') }}"><i
                                                     class="fa fa-check"></i> {{ notification }}</button>
                                     {% endif %}
                                     <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
-                                            value="demanderModifierPegi" title="Modifier"><i class="fa fa-pencil"></i>
+                                            value="demanderModifierPegi" title="Modifier"
+                                            formaction="{{ path('pegis_demandermodifier') }}"><i class="fa fa-pencil"></i>
                                     </button>
                                     <button class="btn btn-danger btn-xs" type="submit" name="cmdAction"
                                             value="supprimerPegi" title="Supprimer"
-                                            onclick="return confirm('Voulez-vous vraiment supprimer ce pegi?');"><i
+                                            onclick="return confirm('Voulez-vous vraiment supprimer ce pegi?');"
+                                            formaction="{{ path('pegis_supprimer') }}"><i
                                                 class="fa fa-trash-o "></i></button>
                                 </td>
                                 {% else %}
@@ -78,12 +81,14 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
-                                                value="validerModifierPegi" title="Enregistrer"><i
+                                                value="validerModifierPegi" title="Enregistrer"
+                                                formaction="{{ path('pegis_validerModifier') }}"><i
                                                     class="fa fa-save"></i></button>
                                         <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
                                                     class="fa fa-eraser"></i></button>
                                         <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
-                                                value="annulerModifierPegi" title="Annuler"><i class="fa fa-undo"></i>
+                                                value="annulerModifierPegi" title="Annuler"
+                                                formaction="{{ path('pegis_afficher') }}"><i class="fa fa-undo"></i>
                                         </button>
                                     </td>
                                 {% endif %}

@@ -53,7 +53,7 @@ class PegisController extends AbstractController
     {
         $db = PdoJeux::getPdoJeux();
         if (!empty($request->request->get('txtLibPegi'))) {
-            $idPegiNotif = $db->ajouterPegi($request->request->get('txtLibPegi'), $request->request->get('lstPersonnes'));
+            $idPegiNotif = $db->ajouterPegi($request->request->get('txtLibPegi'), $request->request->get('txtDescPegi'));
             $notification = 'Ajouté';
         }
         return $this->afficherPegis($db, -1, $idPegiNotif, $notification);
@@ -74,7 +74,7 @@ class PegisController extends AbstractController
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierPegi($request->request->get('txtIdPegi'), $request->request->get('txtLibPegi'), $request->request->get('lstPersonnes'));
+        $db->modifierPegi($request->request->get('txtIdPegi'), $request->request->get('txtLibPegi'), $request->request->get('txtDescPegi'));
         return $this->afficherPegis($db, -1, $request->request->get('txtIdPegi'), 'Modifié');
     }
 
