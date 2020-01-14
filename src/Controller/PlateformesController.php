@@ -34,12 +34,10 @@ class PlateformesController extends AbstractController
      */
     private function afficherPlateformes(PdoJeux $db, int $idPlateformeModif, int $idPlateformeNotif, string $notification)
     {
-        $tbMembres = $db->getLesPersonnes_HP();
         $tbPlateformes = $db->getLesPlateformes();
         return $this->render('lesPlateformes.html.twig', array(
             'menuActif' => 'Jeux',
             'tbPlateformes' => $tbPlateformes,
-            'tbMembres' => $tbMembres,
             'idPlateformeModif' => $idPlateformeModif,
             'idPlateformeNotif' => $idPlateformeNotif,
             'notification' => $notification
@@ -53,7 +51,7 @@ class PlateformesController extends AbstractController
     {
         $db = PdoJeux::getPdoJeux();
         if (!empty($request->request->get('txtLibPlateforme'))) {
-            $idPlateformeNotif = $db->ajouterPlateforme($request->request->get('txtLibPlateforme'), $request->request->get('lstPersonnes'));
+            $idPlateformeNotif = $db->ajouterPlateforme($request->request->get('txtLibPlateforme'), $request->request->get('txtNbPlateformesDispo'));
             $notification = 'Ajouté';
         }
         return $this->afficherPlateformes($db, -1, $idPlateformeNotif, $notification);
@@ -74,7 +72,7 @@ class PlateformesController extends AbstractController
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierPlateforme($request->request->get('txtIdPlateforme'), $request->request->get('txtLibPlateforme'), $request->request->get('lstPersonnes'));
+        $db->modifierPlateforme($request->request->get('txtIdPlateforme'), $request->request->get('txtLibPlateforme'), $request->request->get('txtNbPlateformesDispo'));
         return $this->afficherPlateformes($db, -1, $request->request->get('txtIdPlateforme'), 'Modifié');
     }
 
