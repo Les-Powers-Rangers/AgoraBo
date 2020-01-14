@@ -21,14 +21,18 @@
 
                     <!-- formulaire pour ajouter un nouveau marque-->
                     <tr>
-                        <form action="index.php?uc=gererMarques" method="post">
+                        <form action="{{ path('marques_ajouter') }}" method="post">
                             <td>Nouveau</td>
                             <td>
-                                <input type="text" id="txtLibMarque" name="txtLibMarque" size="24" required minlength="4"  maxlength="24"  placeholder="Libellé" title="De 4 à 24 caractères"  />
+                                <input type="text" id="txtLibMarque" name="txtLibMarque" size="24" required
+                                       minlength="4" maxlength="24" placeholder="Libellé" title="De 4 à 24 caractères"/>
                             </td>
                             <td>
-                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="ajouterNouvelleMarque" title="Enregistrer nouveau marque"><i class="fa fa-save"></i></button>
-                                <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
+                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                        value="ajouterNouvelleMarque" title="Enregistrer nouveau marque"><i
+                                            class="fa fa-save"></i></button>
+                                <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
+                                            class="fa fa-eraser"></i></button>
                             </td>
                         </form>
                     </tr>
@@ -38,25 +42,43 @@
 
                             <!-- formulaire pour modifier et supprimer les marques-->
                             <form action="index.php?uc=gererMarques" method="post">
-                                <td>{{ marque.identifiant }}<input type="hidden"  name="txtIdMarque" value="{{ marque.identifiant }}" /></td>
+                                <td>{{ marque.identifiant }}<input type="hidden" name="txtIdMarque"
+                                                                   value="{{ marque.identifiant }}"/></td>
                                 <td>
                                     {% if marque.identifiant != idMarqueModif %}
                                     {{ marque.libelle }}
                                 </td>
                                 <td>
                                     {% if notification != 'rien' and marque.identifiant == idMarqueNotif %}
-                                        <button class="btn btn-success btn-xs"><i class="fa fa-check"></i> {{ notification }}</button>
+                                        <button class="btn btn-success btn-xs"
+                                                formaction="{{ path('marques_afficher') }}"><i
+                                                    class="fa fa-check"></i> {{ notification }}</button>
                                     {% endif %}
-                                    <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="demanderModifierMarque" title="Modifier"><i class="fa fa-pencil"></i></button>
-                                    <button class="btn btn-danger btn-xs" type="submit" name="cmdAction" value="supprimerMarque" title="Supprimer" onclick="return confirm('Voulez-vous vraiment supprimer ce marque ?');"><i class="fa fa-trash-o "></i></button>
+                                    <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                            value="demanderModifierMarque" title="Modifier"
+                                            formaction="{{ path('marques_demandermodifier') }}"><i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-xs" type="submit" name="cmdAction"
+                                            value="supprimerMarque" title="Supprimer"
+                                            onclick="return confirm('Voulez-vous vraiment supprimer ce marque ?');"
+                                            formaction="{{ path('marques_supprimer') }}"><i
+                                                class="fa fa-trash-o "></i></button>
                                 </td>
                                 {% else %}
-                                    <input type="text" id="txtLibMarque" name="txtLibMarque" size="24" required minlength="4"  maxlength="24"   value="{{ marque.libelle }}" />
+                                    <input type="text" id="txtLibMarque" name="txtLibMarque" size="24" required
+                                           minlength="4" maxlength="24" value="{{ marque.libelle }}"/>
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-xs" type="submit" name="cmdAction" value="validerModifierMarque" title="Enregistrer"><i class="fa fa-save"></i></button>
-                                        <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i class="fa fa-eraser"></i></button>
-                                        <button class="btn btn-warning btn-xs" type="submit" name="cmdAction" value="annulerModifierMarque" title="Annuler"><i class="fa fa-undo"></i></button>
+                                        <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                                value="validerModifierMarque" title="Enregistrer"
+                                                formaction="{{ path('marques_validerModifier') }}"><i
+                                                    class="fa fa-save"></i></button>
+                                        <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
+                                                    class="fa fa-eraser"></i></button>
+                                        <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
+                                                value="annulerModifierMarque" title="Annuler"
+                                                formaction="{{ path('marques_afficher') }}"><i class="fa fa-undo"></i>
+                                        </button>
                                     </td>
                                 {% endif %}
 

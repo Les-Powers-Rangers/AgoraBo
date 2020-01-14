@@ -53,7 +53,7 @@ class MarquesController extends AbstractController
     {
         $db = PdoJeux::getPdoJeux();
         if (!empty($request->request->get('txtLibMarque'))) {
-            $idMarqueNotif = $db->ajouterMarque($request->request->get('txtLibMarque'), $request->request->get('lstPersonnes'));
+            $idMarqueNotif = $db->ajouterMarque($request->request->get('txtLibMarque'));
             $notification = 'Ajouté';
         }
         return $this->afficherMarques($db, -1, $idMarqueNotif, $notification);
@@ -74,7 +74,7 @@ class MarquesController extends AbstractController
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierMarque($request->request->get('txtIdMarque'), $request->request->get('txtLibMarque'), $request->request->get('lstPersonnes'));
+        $db->modifierMarque($request->request->get('txtIdMarque'), $request->request->get('txtLibMarque'));
         return $this->afficherMarques($db, -1, $request->request->get('txtIdMarque'), 'Modifié');
     }
 
