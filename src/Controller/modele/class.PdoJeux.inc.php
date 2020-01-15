@@ -975,10 +975,10 @@ class PdoJeux
                            tournoi.nomTournoi,
                            tournoi.nbParticipants,
                            tournoi.gain,
-                           jv.nom,
+                           jv.nom AS nomJV,
                            p.libPlateforme,
                            f.nomFormat,
-                           ''                                        as libCategorie,
+                           'Hugo a pas fini ¯\_(ツ)_/¯'   as libCategorie,
                            CONCAT(j.nomPersonne, ' ', j.nomPersonne) as nomJuge
                     FROM tournoi
                            LEFT JOIN format f on tournoi.idFormat = f.idFormat

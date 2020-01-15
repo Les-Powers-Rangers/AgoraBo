@@ -23,12 +23,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- formulaire pour ajouter un nouveau tournois-->
+                <!-- formulaire pour ajouter un nouveau tournoi-->
                 <tr>
                     <form action="{{ path('tournois_ajouter') }}" method="post">
                         <td>
                             <input type="number" id="txtNumeroTournoi" name="txtNumeroTournoi" size="10" required
-                                min="1" max="65535" placeholder="Numéro" title="Numéro"/>
+                                min="1" placeholder="Numéro" title="Numéro"/>
                         </td>
                         <td>
                             <input type="number" id="txtAnneeTournoi" name="txtAnneeTournoi" size="10" required
@@ -52,9 +52,7 @@
                             {% endblock %}
                         </td>
                         <td>
-                            <input type="text" id="txtLibNom" name="txtLibNom" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Nom"
-                                   title="De 1 à 50 caractères"/>
+                            <input size=15 disabled/>
                         </td>
                         <td>
                             {% set tbObjects, name, size, idSelect = tbFormats, 'lstFormats', 1, '' %}
@@ -73,65 +71,80 @@
                         </td>
                     </form>
                 </tr>
-{#
-                {% for key, tournois in tbTournois %}
-                    <tr>
-
-                        <!-- formulaire pour modifier et supprimer les plateformes-->
-                        <form method="post">
-                            <td>{{ tournois.identifiant }}<input type="hidden" name="txtIdTournois"
-                                                                   value="{{ tournois.identifiant }}"/></td>
-                            <td>
-                                {% if tournois.identifiant != idTournoisModif %}
-                                {{ tournois.libelle }}
-                            </td>
-                            <td>
-                                {{ tournois.nombreDispo }}
-                            </td>
-                            <td>
-                                {% if notification != 'rien' and tournois.identifiant == idtournoisNotif %}
-                                    <button class="btn btn-success btn-xs"
-                                            formaction="{{ path('plateformes_afficher') }}"><i
-                                                class="fa fa-check"></i> {{ notification }}</button>
-                                {% endif %}
-                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
-                                        value="demanderModifierPlateforme" title="Modifier"
-                                        formaction="{{ path('plateformes_demandermodifier') }}"><i
-                                            class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-xs" type="submit" name="cmdAction"
-                                        value="supprimerPlateforme" title="Supprimer"
-                                        onclick="return confirm('Voulez-vous vraiment supprimer cette plateforme ?');"
-                                        formaction="{{ path('plateformes_demandermodifier') }}">
-                                    <i class="fa fa-trash-o "></i></button>
-                            </td>
-                            {% else %}
-                                <input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required
-                                       minlength="4" maxlength="24" value="{{ plateforme.libelle }}"/>
+                {% for key, tournoi in tbTournois %}
+                <tr>
+                            <!-- formulaire pour demander la modification et supprimer des tournois-->
+                            <form method="post">
+                                <td>{{ tournoi.numTournoi }}<input type="hidden" name="txtNumeroTournoi"
+                                                                  value="{{ tournoi.numTournoi }}"/></td>
+                                <td>
+                                    {% if tournoi.numTournoi != idTournoisModif %}
+                                    {{ tournoi.anneeTournoi }}
                                 </td>
                                 <td>
-                                    <input type="text" id="txtNbPlateformesDispo" name="txtNbPlateformesDispo"
-                                           size="3" required minlength="1" maxlength="3"
-                                           value="{{ plateforme.nombreDispo }}"/>
+                                    {{ tournoi.nomTournoi }}
                                 </td>
                                 <td>
+                                    {{ tournoi.nbParticipants }}
+                                </td>
+                                <td>
+                                    {{ tournoi.nomJV }}
+                                </td>
+                                <td>
+                                    {{ tournoi.libPlateforme }}
+                                </td>
+                                <td>
+                                    {{ tournoi.nomFormat }}
+                                </td>
+                                <td>
+                                    {{ tournoi.libCategorie }}
+                                </td>
+                                <td>
+                                    {% if notification != 'rien' and tournoi.numTournoi == idTournoisNotif %}
+                                        <button class="btn btn-success btn-xs"
+                                                formaction="{{ path('tournois_afficher') }}"><i
+                                                    class="fa fa-check"></i> {{ notification }}</button>
+                                    {% endif %}
                                     <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
-                                            value="validerModifierPlateforme" title="Enregistrer"
-                                            formaction="{{ path('plateformes_validerModifier') }}"><i
-                                                class="fa fa-save"></i></button>
-                                    <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
-                                                class="fa fa-eraser"></i></button>
-                                    <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
-                                            value="annulerModifierPlateforme" title="Annuler"
-                                            formaction="{{ path('plateformes_afficher') }}"><i
-                                                class="fa fa-undo"></i></button>
+                                            value="demanderModifierTournois" title="Modifier"
+                                            formaction="{{ path('tournois_demandermodifier') }}"><i class="fa fa-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-xs" type="submit" name="cmdAction"
+                                            value="supprimerTournois" title="Supprimer"
+                                            onclick="return confirm('Voulez-vous vraiment supprimer ce tournoi ?');"
+                                            formaction="{{ path('tournois_supprimer') }}"><i
+                                                class="fa fa-trash-o "></i></button>
                                 </td>
-                            {% endif %}
+                                {% else %}
+                                    <input type="text" id="txtLibGenre" name="txtLibGenre" size="24" required
+                                           minlength="4" maxlength="24" value="{{ tournoi.libelle }}"/>
+                                    </td>
+                                    <td>
+                                        <!--<?php afficherListe($tbMembres, 'lstPersonnes', 1, $tournoi->idGerant); ?>-->
+                                        {% set tbObjets, name, size, idSelect = tbMembres, 'lstPersonnes', 1, tournoi.idGerant %}
+                                        {{ include('liste.html.twig') }}
+                                    </td>
+                                    <td>
+                                        {{ tournoi.nbJeuxGenre }}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                                value="validerModifierGenre" title="Enregistrer"
+                                                formaction="{{ path('tournois_validerModifier') }}"><i
+                                                    class="fa fa-save"></i></button>
+                                        <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
+                                                    class="fa fa-eraser"></i></button>
+                                        <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
+                                                value="annulerModifierGenre" title="Annuler"
+                                                formaction="{{ path('tournois_afficher') }}"><i class="fa fa-undo"></i>
+                                        </button>
+                                    </td>
+                                {% endif %}
 
-                        </form>
+                            </form>
 
-                    </tr>
-                {% endfor %}
-#}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div><!-- fin div panel-body-->
