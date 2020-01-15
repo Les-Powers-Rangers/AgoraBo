@@ -28,7 +28,7 @@
                 ?>-->
                 <!-- formulaire pour ajouter un nouveau jeu vidéo-->
                 <tr>
-                    <form method="post">
+                    <form action="{{ path('jeux_ajouter') }}" method="post">
                         <td>
                             <input type="text" id="txtRefJeu" name="txtRefJeu" size="16" required minlength="4"
                                    maxlength="16" placeholder="Nouveau / Référence" title="De 4 à 16 caractères"/>
