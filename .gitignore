@@ -53,6 +53,11 @@
 # Embedded web-server pid file
 /.web-server-pid
 
+# Local env files
+.env.local
+.env.*
+.env.*.local
+
 ### Visual Studio Code ###
 .vscode/*
 !.vscode/settings.json
