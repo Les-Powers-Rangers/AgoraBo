@@ -32,7 +32,7 @@ class JeuxController extends AbstractController
      * @param $idJeuNotif  positionné si mise à jour dans la vue
      * @param $notification  pour notifier la mise à jour dans la vue
      */
-    private function afficherJeux(PdoJeux $db, int $idJeuModif, int $idJeuNotif, string $notification)
+    private function afficherJeux(PdoJeux $db, $idJeuModif, $idJeuNotif, $notification)
     {
         $tbJeux = $db->getLesJeuxVideo();
         $tbGenres  = $db->getLesGenres();
@@ -44,7 +44,7 @@ class JeuxController extends AbstractController
             'menuActif' => 'Jeux',
             'tbJeuxVideo' => $tbJeux,
             'refJeuModif' => $idJeuModif,
-            'idJeuNotif' => $idJeuNotif,
+            'refJeuNotif' => $idJeuNotif,
             'tbGenres'  => $tbGenres,
             'tbPlateformes'  => $tbPlateformes,
             'tbPegis'  => $tbPegis,
@@ -59,8 +59,9 @@ class JeuxController extends AbstractController
     public function ajouter(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        if (!empty($request->request->get('txtLibJeu'))) {
-            $idJeuNotif = $db->ajouterJeu($request->request->get('txtLibJeu'), $request->request->get('txtNbJeuxDispo'));
+        if (!empty($request->request->get('txtRefJeu'))) {
+            /** @var PdoJeux $db */
+            $idJeuNotif = $db->ajouterJeuVideo($request->request->get('txtRefJeu'), $request->request->get('lstPlateformes'), $request->request->get('lstPegis'), $request->request->get('lstGenres'), $request->request->get('lstMarques'), $request->request->get('txtNom'), $request->request->get('txtPrix'), $request->request->get('txtDateParution'));
             $notification = 'Ajouté';
         }
         return $this->afficherJeux($db, -1, $idJeuNotif, $notification);
@@ -72,7 +73,7 @@ class JeuxController extends AbstractController
     public function demanderModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        return $this->afficherJeux($db, $request->request->get('txtIdJeu'), -1, 'rien');
+        return $this->afficherJeux($db, $request->request->get('txtRefJeu'), -1, 'rien');
     }
 
     /**
@@ -81,8 +82,9 @@ class JeuxController extends AbstractController
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierJeu($request->request->get('txtIdJeu'), $request->request->get('txtLibJeu'), $request->request->get('txtNbJeuxDispo'));
-        return $this->afficherJeux($db, -1, $request->request->get('txtIdJeu'), 'Modifié');
+        /** @var PdoJeux $db */
+        $db->modifierJeuVideo($request->request->get('txtRefJeu'), $request->request->get('lstPlateformes'), $request->request->get('lstPegis'), $request->request->get('lstGenres'), $request->request->get('lstMarques'), $request->request->get('txtNom'), $request->request->get('txtPrix'), $request->request->get('txtDateParution'));
+        return $this->afficherJeux($db, -1, $request->request->get('txtRefJeu'), 'Modifié');
     }
 
     /**
@@ -91,7 +93,8 @@ class JeuxController extends AbstractController
     public function supprimer(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->supprimerJeu($request->request->get('txtIdJeu'));
+        /** @var PdoJeux $db */
+        $db->supprimerJeuVideo($request->request->get('txtRefJeu'));
         $this->addFlash(
             'success', 'Le jeu a été supprimé'
         );
