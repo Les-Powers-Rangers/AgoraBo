@@ -11,21 +11,18 @@
             <table class="table table-striped table-advance table-hover">
                 <thead>
                 <tr class="tableau-entete">
-                    <th><i class="fa fa-bullhorn"></i> Année</th>
-                    <th><i class="fa fa-bookmark"></i> Plateforme</th>
-                    <th><i class="fa fa-bookmark"></i> Pegi</th>
-                    <th><i class="fa fa-bookmark"></i> Genre</th>
-                    <th><i class="fa fa-bookmark"></i> Marque</th>
+                    <th><i class="fa fa-bullhorn"></i> Numéro</th>
+                    <th><i class="fa fa-calendar"></i> Année</th>
                     <th><i class="fa fa-bookmark"></i> Nom</th>
-                    <th><i class="fa fa-bookmark"></i> Prix</th>
-                    <th><i class="fa fa-bookmark"></i> Date parution</th>
+                    <th><i class="fa fa-users"></i> Participants</th>
+                    <th><i class="fa fa-gamepad"></i> Jeu</th>
+                    <th><i class="fa fa-desktop"></i> Plateforme</th>
+                    <th><i class="fa fa-bookmark"></i> Format</th>
+                    <th><i class="fa fa-bookmark"></i> Catégorie</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                <!--<?php
-            //require_once '_forms.inc.php';
-                ?>-->
                 <!-- formulaire pour ajouter un nouveau tournois-->
                 <tr>
                     <form action="{{ path('tournois_ajouter') }}" method="post">
@@ -142,7 +139,7 @@
                 </tbody>
             </table>
         </div><!-- fin div panel-body-->
-    </section><!-- fin section jeux_videos-->
+    </section><!-- fin section tournois-->
 </div><!--fin div "col-12">
 
 {% endblock %}
