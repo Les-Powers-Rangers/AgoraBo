@@ -67,7 +67,7 @@
 *.code-workspace
 
 ### PHPStorm ###
-/.idea/
+.idea/
 
 # File-based project format
 *.iws

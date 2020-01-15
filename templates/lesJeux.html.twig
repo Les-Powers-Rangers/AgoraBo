@@ -107,11 +107,11 @@
                             <td><!--<?php echo $jeuVideo->prix; ?>-->{{ jeuVideo.prix }}</td>
                             <td><!--<?php echo $jeuVideo->dateP; ?>-->{{ jeuVideo.dateP }}</td>
                             <td>
-                                <!--<?php if ($notification != 'rien' && $jeuVideo->reference == $refJeuNotif) {
+                                <!--<?php if ($notification != 'rien' && $jeuVideo->reference == $idJeuNotif) {
                                 echo '<button class="btn btn-success btn-xs"><i class="fa fa-check"></i>'.$notification.'</button>';
 
                                 } ?>-->
-                                {% if notification != 'rien' and jeuVideo.reference == refJeuNotif %}
+                                {% if notification != 'rien' and jeuVideo.reference == idJeuNotif %}
                                     <button class="btn btn-success btn-xs"
                                             formaction="{{ path('jeux_afficher') }}"><i class="fa fa-check"></i>{{ notification }}
                                     </button>
