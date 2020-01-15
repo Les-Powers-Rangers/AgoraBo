@@ -27,28 +27,29 @@
                 <tr>
                     <form action="{{ path('tournois_ajouter') }}" method="post">
                         <td>
-                            <input type="text" id="txtAnneeTournoi" name="txtAnneeTournois" size="15" required
-                                   minlength="4" maxlength="4" placeholder="Année" title="4 caractères"/>
+                            <input type="number" id="txtNumeroTournoi" name="txtNumeroTournoi" size="10" required
+                                min="1" max="65535" placeholder="Numéro" title="Numéro"/>
                         </td>
                         <td>
-                            <input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Plateforme"
+                            <input type="number" id="txtAnneeTournoi" name="txtAnneeTournoi" size="10" required
+                                min="1900" max="2099" placeholder="Année" title="Année"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtNomTournoi" name="txtNomTournoi" size="20"
+                                   required minlength="1" maxlength="50" placeholder="Nom"
                                    title="De 1 à 50 caractères"/>
                         </td>
                         <td>
-                            <input type="text" id="txtLibPegi" name="txtLibPegi" size="7"
-                                   required minlength="1" maxlength="3" placeholder="Pegi"
-                                   title="De 1 à 3 caractères"/>
+                            <input type="number" id="txtNbParticipantsTournoi" name="txtNbParticipantsTournoi" size="8"
+                                   required min="1" maxlength="99" placeholder="Nb participants"
+                                   title="De 1 à 99"/>
                         </td>
                         <td>
-                            <input type="text" id="txtLibGenre" name="txtLibGenre" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Genre"
-                                   title="De 1 à 50 caractères"/>
-                        </td>
-                        <td>
-                            <input type="text" id="txtLibMarque" name="txtLibMarque" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Marque"
-                                   title="De 1 à 50 caractères"/>
+                            {% block liste_jv %}
+                                {% set tbObjects, name, size, idSelect, valueKey, nameKey =
+                                        tbJeuxVideo, 'lstJeux', 1, '', 'reference', 'nom' %}
+                                {{ include('liste.html.twig') }}
+                            {% endblock %}
                         </td>
                         <td>
                             <input type="text" id="txtLibNom" name="txtLibNom" size="15"
@@ -56,14 +57,12 @@
                                    title="De 1 à 50 caractères"/>
                         </td>
                         <td>
-                            <input type="text" id="txtLibPrix" name="txtLibPrix" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Prix"
-                                   title="De 1 à 50 caractères"/>
+                            {% set tbObjects, name, size, idSelect = tbFormats, 'lstFormats', 1, '' %}
+                            {{ include('liste.html.twig') }}
                         </td>
                         <td>
-                            <input type="text" id="txtDateParution" name="txtDateParution" size="15"
-                                   required minlength="1" maxlength="50" placeholder="Date"
-                                   title="De 1 à 50 caractères"/>
+                            {% set tbObjects, name, size, idSelect = tbCategories, 'lstCategories', 1, '' %}
+                            {{ include('liste.html.twig') }}
                         </td>
                         <td>
                             <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
@@ -133,9 +132,6 @@
                     </tr>
                 {% endfor %}
 #}
-                <!--<?php
-                foreach ($tbJeuxVideo as $jeuVideo) {
-                ?>-->
                 </tbody>
             </table>
         </div><!-- fin div panel-body-->

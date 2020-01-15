@@ -36,10 +36,18 @@ class TournoisController extends AbstractController
     {
         /** @var PdoJeux $db */
         $tbTournois = $db->getLesTournois();
+        $tbJeuxVideo = $db->getLesJeuxVideo();
+        $tbPlateformes = $db->getLesPlateformes();
+        $tbFormats = $db->getLesFormats();
+        $tbCategories = $db->getLesCategories();
 
         return $this->render('lesTournois.html.twig', array(
             'menuActif' => 'Jeux',
             'tbTournois' => $tbTournois,
+            'tbJeuxVideo' => $tbJeuxVideo,
+            'tbPlateformes' => $tbPlateformes,
+            'tbFormats' => $tbFormats,
+            'tbCategories' => $tbCategories,
             'idTournoisModif' => $idTournoisModif,
             'idTournoisNotif' => $idTournoisNotif,
             'notification' => $notification
