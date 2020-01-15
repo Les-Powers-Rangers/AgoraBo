@@ -2,29 +2,42 @@
     MAIN SIDEBAR MENU
     *********************************************************************************************************************************************************** -->
 <!--sidebar start-->
+{% set route = app.request.get('_route') %}
+
 <aside>
     <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-            <p class="centered"><a href="profile.html"><img src="{{ asset('assets/img/greece-1162816_640.jpg')}}" class="img-circle"
+            <p class="centered"><a href="profile.html"><img src="{{ asset('assets/img/greece-1162816_640.jpg') }}"
+                                                            class="img-circle"
                                                             width="80"></a></p>
             <h5 class="centered">MJC Agora</h5>
 
             <li class="sub-menu">
                 <!--<?php if (isset($menuActif) && $menuActif == 'Jeux') {echo 'class="active"';} ?> -->
-                <a
-                        {% if menuActif is defined and menuActif == 'Jeux' %} class="active"  {% endif %}
+                <a {% if menuActif is defined and menuActif == 'Jeux' %} class="active"  {% endif %}
                         href="{{ path('accueil') }}"><i class="fa fa-desktop"></i>
                     <span>Jeux vidéos</span>
                 </a>
                 <ul class="sub">
-                    <li><a href="{{ path('accueil') }}?uc=gererJeuxVideo&action=afficherJeux">Jeux</a></li>
-                    <li><a href="{{ path('genres_afficher') }}">Genres</a></li>
-                    <li><a href="{{ path('plateformes_afficher') }}">Plateformes</a>
+                    <li class="{{ route starts with 'jeux' ? 'active' }}">
+                        <a href="{{ path('jeux_afficher') }}">Jeux</a>
                     </li>
-                    <li><a href="{{ path('marques_afficher') }}">Marques</a></li>
-                    <li><a href="{{ path('pegis_afficher') }}">Pegi</a></li>
-                    <li><a href="{{ path('accueil') }}?uc=gererTournois&action=afficherTournois">Tournois</a></li>
+                    <li class="{{ route starts with 'genres' ? 'active' }}">
+                        <a href="{{ path('genres_afficher') }}">Genres</a>
+                    </li>
+                    <li class="{{ route starts with 'plateformes' ? 'active' }}">
+                        <a href="{{ path('plateformes_afficher') }}">Plateformes</a>
+                    </li>
+                    <li class="{{ route starts with 'marques' ? 'active' }}">
+                        <a href="{{ path('marques_afficher') }}">Marques</a>
+                    </li>
+                    <li class="{{ route starts with 'pegis' ? 'active' }}">
+                        <a href="{{ path('pegis_afficher') }}">Pegi</a>
+                    </li>
+                    <li class="{{ route starts with 'tournois' ? 'active' }}">
+                        <a href="{{ path('accueil') }}?uc=gererTournois&action=afficherTournois">Tournois</a>
+                    </li>
                 </ul>
             </li>
             <li class="sub-menu">

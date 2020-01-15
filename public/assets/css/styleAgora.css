@@ -53,3 +53,25 @@ a.userAgo {
     color: red;
     font-weight:bold;
 }
+
+.panel {
+    margin: 30px 0 !important;
+}
+
+
+.panel-body {
+    height: calc(100vh - 268px);
+    overflow: auto;
+}
+
+.wrapper {
+    padding-bottom: 0;
+}
+
+.actions {
+    width: 95px;
+}
+
+.identifiants {
+    width: 120px;
+}
