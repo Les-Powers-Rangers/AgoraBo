@@ -23,9 +23,116 @@
                 </tr>
                 </thead>
                 <tbody>
-                <!-- formulaire pour ajouter un nouveau jeu vidéo-->
+                <!-- formulaire pour ajouter un nouveau tournois-->
                 <tr>
+                    <form action="{{ path('tournois_ajouter') }}" method="post">
+                        <td>
+                            <input type="text" id="txtAnneeTournoi" name="txtAnneeTournois" size="15" required
+                                   minlength="4" maxlength="4" placeholder="Année" title="4 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Plateforme"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibPegi" name="txtLibPegi" size="7"
+                                   required minlength="1" maxlength="3" placeholder="Pegi"
+                                   title="De 1 à 3 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibGenre" name="txtLibGenre" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Genre"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibMarque" name="txtLibMarque" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Marque"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibNom" name="txtLibNom" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Nom"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtLibPrix" name="txtLibPrix" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Prix"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <input type="text" id="txtDateParution" name="txtDateParution" size="15"
+                                   required minlength="1" maxlength="50" placeholder="Date"
+                                   title="De 1 à 50 caractères"/>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                    value="ajouterNouveeauTournois" title="Enregistrer nouveau tournois"><i
+                                        class="fa fa-save"></i></button>
+                            <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
+                                        class="fa fa-eraser"></i></button>
+                        </td>
+                    </form>
                 </tr>
+{#
+                {% for key, tournois in tbTournois %}
+                    <tr>
+
+                        <!-- formulaire pour modifier et supprimer les plateformes-->
+                        <form method="post">
+                            <td>{{ tournois.identifiant }}<input type="hidden" name="txtIdTournois"
+                                                                   value="{{ tournois.identifiant }}"/></td>
+                            <td>
+                                {% if tournois.identifiant != idTournoisModif %}
+                                {{ tournois.libelle }}
+                            </td>
+                            <td>
+                                {{ tournois.nombreDispo }}
+                            </td>
+                            <td>
+                                {% if notification != 'rien' and tournois.identifiant == idtournoisNotif %}
+                                    <button class="btn btn-success btn-xs"
+                                            formaction="{{ path('plateformes_afficher') }}"><i
+                                                class="fa fa-check"></i> {{ notification }}</button>
+                                {% endif %}
+                                <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                        value="demanderModifierPlateforme" title="Modifier"
+                                        formaction="{{ path('plateformes_demandermodifier') }}"><i
+                                            class="fa fa-pencil"></i></button>
+                                <button class="btn btn-danger btn-xs" type="submit" name="cmdAction"
+                                        value="supprimerPlateforme" title="Supprimer"
+                                        onclick="return confirm('Voulez-vous vraiment supprimer cette plateforme ?');"
+                                        formaction="{{ path('plateformes_demandermodifier') }}">
+                                    <i class="fa fa-trash-o "></i></button>
+                            </td>
+                            {% else %}
+                                <input type="text" id="txtLibPlateforme" name="txtLibPlateforme" size="24" required
+                                       minlength="4" maxlength="24" value="{{ plateforme.libelle }}"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="txtNbPlateformesDispo" name="txtNbPlateformesDispo"
+                                           size="3" required minlength="1" maxlength="3"
+                                           value="{{ plateforme.nombreDispo }}"/>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
+                                            value="validerModifierPlateforme" title="Enregistrer"
+                                            formaction="{{ path('plateformes_validerModifier') }}"><i
+                                                class="fa fa-save"></i></button>
+                                    <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
+                                                class="fa fa-eraser"></i></button>
+                                    <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
+                                            value="annulerModifierPlateforme" title="Annuler"
+                                            formaction="{{ path('plateformes_afficher') }}"><i
+                                                class="fa fa-undo"></i></button>
+                                </td>
+                            {% endif %}
+
+                        </form>
+
+                    </tr>
+                {% endfor %}
+#}
                 <!--<?php
                 foreach ($tbJeuxVideo as $jeuVideo) {
                 ?>-->
