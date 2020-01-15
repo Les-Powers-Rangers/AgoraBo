@@ -970,9 +970,21 @@ class PdoJeux
 
     public function getLesTournois()
     {
-        $requete = "SELECT anneeTournoi, numTournoi, nomTournoi, jeu_video.nom
-                    FROM tournoi 
-                    NATURAL JOIN jeu_video";
+        $requete = "SELECT tournoi.numTournoi,
+                           tournoi.anneeTournoi,
+                           tournoi.nomTournoi,
+                           tournoi.nbParticipants,
+                           tournoi.gain,
+                           jv.nom,
+                           p.libPlateforme,
+                           f.nomFormat,
+                           ''                                        as libCategorie,
+                           CONCAT(j.nomPersonne, ' ', j.nomPersonne) as nomJuge
+                    FROM tournoi
+                           LEFT JOIN format f on tournoi.idFormat = f.idFormat
+                           LEFT JOIN jeu_video jv on tournoi.refJeu = jv.refJeu
+                           LEFT JOIN plateforme p on jv.idPlateforme = p.idPlateforme
+                           LEFT JOIN personne j on tournoi.idJuge = j.idPersonne";
         try {
             $resultat = PdoJeux::$monPdo->query($requete);
             $tbTournois = $resultat->fetchAll();

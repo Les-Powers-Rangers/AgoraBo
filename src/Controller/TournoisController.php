@@ -29,11 +29,12 @@ class TournoisController extends AbstractController
      * fonction pour afficher la liste des tournois
      * @param $db
      * @param $idTournoisModif  positionné si demande de modification
-     * @param $idTournoisNotif  positionné si mise à jour dans la vue
+     * @param $idTournoisNotif  positionné si mise à jour ndans la vue
      * @param $notification  pour notifier la mise à jour dans la vue
      */
     private function afficherTournois(PdoJeux $db, int $idTournoisModif, int $idTournoisNotif, string $notification)
     {
+        /** @var PdoJeux $db */
         $tbTournois = $db->getLesTournois();
 
         return $this->render('lesTournois.html.twig', array(
