@@ -34,12 +34,21 @@ class JeuxController extends AbstractController
      */
     private function afficherJeux(PdoJeux $db, int $idJeuModif, int $idJeuNotif, string $notification)
     {
-        $tbJeux = $db->getLesJeux_HP();
+        $tbJeux = $db->getLesJeuxVideo();
+        $tbGenres  = $db->getLesGenres();
+        $tbPlateformes  = $db->getLesPlateformes();
+        $tbPegis  = $db->getLesPegis();
+        $tbMarques  = $db->getLesMarques();
+
         return $this->render('lesJeux.html.twig', array(
             'menuActif' => 'Jeux',
-            'tbJeux' => $tbJeux,
-            'idJeuModif' => $idJeuModif,
+            'tbJeuxVideo' => $tbJeux,
+            'refJeuModif' => $idJeuModif,
             'idJeuNotif' => $idJeuNotif,
+            'tbGenres'  => $tbGenres,
+            'tbPlateformes'  => $tbPlateformes,
+            'tbPegis'  => $tbPegis,
+            'tbMarques'  => $tbMarques,
             'notification' => $notification
         ));
     }
