@@ -1,13 +1,42 @@
+{#  Template pour afficher une liste déroulante.
+    1er exemple d'utilisation:
+        {% set tbObjects, name, size, idSelect = tbPlateformes, 'listePlateformes', 1, '' %}
+        {{ include('liste.html.twig') }}
+    Avec l'exemple ci-dessus, la template liste va parcourir le tableau donné dans 'tbOjects' et va utiliser pour chaque
+    item de la liste, le champ 'identifiant' (par ex tbObjects[0].identifiant pour le 1er item) pour définir sa valeur
+    et le champ 'libelle' pour définir le nom de l'item, celui qui sera affiché dans le navigateur.
+
+    Mais, on peut également spécifier le nom des champs à utiliser si on souhaite donner un tbOjects qui n'utiliserait
+    pas le champ 'libelle' mais 'nom'. Ou bien qui utiliserait 'reference' au lieu de 'identifiant' (c'est le cas des 
+    jeux vidéos) en appeleant la template de cette manière:
+        {% set tbObjects, name, size, idSelect, valueKey, nameKey = tbJV, 'listeJeux', 1, '', 'nom', 'reference' %}
+        {{ include('liste.html.twig') }}
+    Remarquez les deux nouvelles variables 'valueKey' et 'nameKey' qui sont respectivement affectées à nom et reference.
+    Ainsi, la template utilisera les bons attributs pour afficher la liste.
+#}
 <select name="{{ name }}" id="{{ name }}" size="{{ size }}">
-    {% for key, objet in tbObjects %}
-        {#  l'élément en paramètre est présélectionné #}
-        {% if objet.identifiant != idSelect %}
-            {# si l'identifiant de l'objet n'est pas l'identifiant présélectionné #}
-            <option value="{{ objet.identifiant }}">
-                {{ objet.libelle }}</option>
-        {% else %}
-            <option selected value="{{ objet.identifiant }}">
-                {{ objet.libelle }}</option>
-        {% endif %}
-    {% endfor %}
+    {#  Si 'valueKey' et/ou 'nameKey' sont définis, on les utilise sinon on se rabat sur le comportement d'avant en
+        utilisant valueKey='identifiant' et nameKey='libelle'
+    #}
+    {% set valueKey = valueKey is not defined ? "identifiant" : valueKey %}
+    {% set nameKey = nameKey is not defined ? "libelle" : nameKey %}
+
+    {% if tbObjects|length > 0 %}
+        {#  On vérifie que tbOjects est vide ou pas pour éviter de throw bêtement une exception #}
+        {% for key, objet in tbObjects %}
+            {#  Récupération de la valeur et du nom de l'item en fonction de valueKey et nameKey #}
+            {% set objValue = attribute(objet, valueKey) %}
+            {% set objName = attribute(objet, nameKey) %}
+
+            {#  l'élément en paramètre est présélectionné #}
+            {% if objValue != idSelect %}
+                {# si l'identifiant de l'objet n'est pas l'identifiant présélectionné #}
+                <option value="{{ objValue }}">{{ objName }}</option>
+            {% else %}
+                <option selected value="{{ objValue }}">{{ objName }}</option>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <option disabled>Liste vide !</option>
+    {% endif %}
 </select>
