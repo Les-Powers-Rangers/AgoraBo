@@ -1,5 +1,5 @@
 <select name="{{ name }}" id="{{ name }}" size="{{ size }}">
-    {% for key, objet in tbObjets %}
+    {% for key, objet in tbObjects %}
         {#  l'élément en paramètre est présélectionné #}
         {% if objet.identifiant != idSelect %}
             {# si l'identifiant de l'objet n'est pas l'identifiant présélectionné #}
