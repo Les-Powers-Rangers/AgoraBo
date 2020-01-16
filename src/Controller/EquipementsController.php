@@ -1,5 +1,5 @@
 <?php
-// src/Controller/TournoisController.php
+// src/Controller/EquipementsController.php
 namespace App\Controller;
 
 use PdoJeux;
@@ -10,105 +10,105 @@ use Symfony\Component\Routing\Annotation\Route;
 
 require_once 'modele/class.PdoJeux.inc.php';
 
-class TournoisController extends AbstractController
+class EquipementsController extends AbstractController
 {
     /**
-     * @Route("/tournois", name="tournois_afficher")
+     * @Route("/equipements", name="equipements_afficher")
      */
     public function index(SessionInterface $session)
     {
         if ($session->has('idUtilisateur')) {
             $db = PdoJeux::getPdoJeux();
-            return $this->afficherTournois($db, -1, -1, 'rien');
+            return $this->afficherEquipements($db, -1, -1, 'rien');
         } else {
             return $this->render('connexion.html.twig');
         }
     }
 
     /**
-     * fonction pour afficher la liste des tournois
+     * fonction pour afficher la liste des equipements
      * @param $db
-     * @param $idTournoisModif  positionné si demande de modification
-     * @param $idTournoisNotif  positionné si mise à jour ndans la vue
+     * @param $idEquipementsModif  positionné si demande de modification
+     * @param $idEquipementsNotif  positionné si mise à jour ndans la vue
      * @param $notification  pour notifier la mise à jour dans la vue
      */
-    private function afficherTournois(PdoJeux $db, int $idTournoisModif, int $idTournoisNotif, string $notification)
+    private function afficherEquipements(PdoJeux $db, int $idEquipementsModif, int $idEquipementsNotif, string $notification)
     {
         /** @var PdoJeux $db */
-        $tbTournois = $db->getLesTournois();
+        $tbEquipements = $db->getLesEquipements();
         $tbJeuxVideo = $db->getLesJeuxVideo();
         $tbPlateformes = $db->getLesPlateformes();
         $tbFormats = $db->getLesFormats();
         $tbCategories = $db->getLesCategories();
 
-        return $this->render('lesTournois.html.twig', array(
+        return $this->render('lesEquipements.html.twig', array(
             'menuActif' => 'Jeux',
-            'tbTournois' => $tbTournois,
+            'tbEquipements' => $tbEquipements,
             'tbJeuxVideo' => $tbJeuxVideo,
             'tbPlateformes' => $tbPlateformes,
             'tbFormats' => $tbFormats,
             'tbCategories' => $tbCategories,
-            'idTournoisModif' => $idTournoisModif,
-            'idTournoisNotif' => $idTournoisNotif,
+            'idEquipementsModif' => $idEquipementsModif,
+            'idEquipementsNotif' => $idEquipementsNotif,
             'notification' => $notification
         ));
     }
 
     /**
-     * @Route("/tournois/ajouter", name="tournois_ajouter")
+     * @Route("/equipements/ajouter", name="equipements_ajouter")
      */
     public function ajouter(SessionInterface $session, Request $request)
     {
         /** @var PdoJeux $db */
         $db = PdoJeux::getPdoJeux();
-        if (!empty($request->request->get('txtNumeroTournoi'))) {
+        if (!empty($request->request->get('txtNumeroEquipement'))) {
             // Création de l'objet
-            $objTournoi = (Object)[
-                "NumeroTournoi" => $request->request->get('txtNumeroTournoi'),
-                "AnneeTournoi" => $request->request->get('txtAnneeTournoi'),
-                "NomTournoi" => $request->request->get('txtNomTournoi'),
-                "NbParticipantsTournoi" => $request->request->get('txtNbParticipantsTournoi'),
-                "GainTournoi" => 0, //$request->request->get('txtGainTournoi'),
+            $objEquipement = (Object)[
+                "NumeroEquipement" => $request->request->get('txtNumeroEquipement'),
+                "AnneeEquipement" => $request->request->get('txtAnneeEquipement'),
+                "NomEquipement" => $request->request->get('txtNomEquipement'),
+                "NbParticipantsEquipement" => $request->request->get('txtNbParticipantsEquipement'),
+                "GainEquipement" => 0, //$request->request->get('txtGainEquipement'),
                 "Jeu" => $request->request->get('lstJeux'),
                 "Format" => $request->request->get('lstFormats'),
                 "Categorie" => $request->request->get('lstCategories')
             ];
-            $idTournoisNotif = $db->ajouterTournoi($objTournoi);
+            $idEquipementsNotif = $db->ajouterEquipement($objEquipement);
             $notification = 'Ajouté';
         }
-        return $this->afficherTournois($db, -1, $idTournoisNotif, $notification);
+        return $this->afficherEquipements($db, -1, $idEquipementsNotif, $notification);
     }
 
     /**
-     * @Route("/tournois/demandermodifier", name="tournois_demandermodifier")
+     * @Route("/equipements/demandermodifier", name="equipements_demandermodifier")
      */
     public function demanderModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        return $this->afficherTournois($db, $request->request->get('txtIdTournois'), -1, 'rien');
+        return $this->afficherEquipements($db, $request->request->get('txtIdEquipements'), -1, 'rien');
     }
 
     /**
-     * @Route("/tournois/validerModifier", name="tournois_validerModifier")
+     * @Route("/equipements/validerModifier", name="equipements_validerModifier")
      */
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierTournoi($request->request->get('txtIdTournois'), $request->request->get('txtLibTournois'), $request->request->get('txtNbTournoisDispo'));
-        return $this->afficherTournois($db, -1, $request->request->get('txtIdTournois'), 'Modifié');
+        $db->modifierEquipement($request->request->get('txtIdEquipements'), $request->request->get('txtLibEquipements'), $request->request->get('txtNbEquipementsDispo'));
+        return $this->afficherEquipements($db, -1, $request->request->get('txtIdEquipements'), 'Modifié');
     }
 
     /**
-     * @Route("/tournois/supprimer", name="tournois_supprimer")
+     * @Route("/equipements/supprimer", name="equipements_supprimer")
      */
     public function supprimer(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->supprimerTournoi($request->request->get('txtIdTournois'));
+        $db->supprimerEquipement($request->request->get('txtIdEquipements'));
         $this->addFlash(
-            'success', 'Le tournois a été supprimé'
+            'success', 'Le equipements a été supprimé'
         );
 
-        return $this->afficherTournois($db, -1, -1, 'rien');
+        return $this->afficherEquipements($db, -1, -1, 'rien');
     }
 }
