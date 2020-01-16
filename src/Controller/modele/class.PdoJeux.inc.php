@@ -1183,17 +1183,17 @@ class PdoJeux
     public function supprimerTournoi($annee, $num)
     {
         try {
-            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM equipementtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
-            $requete_prepare->execute();
-
-            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM animateurtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
-            $requete_prepare->execute();
+//            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM equipementtournoi
+//                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
+//            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
+//            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
+//            $requete_prepare->execute();
+//
+//            $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM animateurtournoi
+//                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
+//            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
+//            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
+//            $requete_prepare->execute();
 
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM tournoi 
                                                             WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");

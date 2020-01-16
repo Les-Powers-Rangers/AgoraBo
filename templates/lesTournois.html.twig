@@ -79,7 +79,8 @@
                                                                   value="{{ tournoi.numTournoi }}"/></td>
                                 <td>
                                     {% if tournoi.numTournoi != idTournoisModif %}
-                                    {{ tournoi.anneeTournoi }}
+                                    {{ tournoi.anneeTournoi }}<input type="hidden" name="txtAnneeTournoi"
+                                                                     value="{{ tournoi.anneeTournoi }}"/>
                                 </td>
                                 <td>
                                     {{ tournoi.nomTournoi }}
