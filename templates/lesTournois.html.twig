@@ -23,6 +23,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                {{ include('messages.html.twig') }}
                 <!-- formulaire pour ajouter un nouveau tournoi-->
                 <tr>
                     <form action="{{ path('tournois_ajouter') }}" method="post">
@@ -75,10 +76,11 @@
                 <tr>
                             <!-- formulaire pour demander la modification et supprimer des tournois-->
                             <form method="post">
-                                <td>{{ tournoi.numTournoi }}<input type="hidden" name="txtNumeroTournoi"
-                                                                  value="{{ tournoi.numTournoi }}"/></td>
+                                <input type="hidden" name="txtIdTournois" value="{{ tournoi.idTournoi }}"/>
+                                <td>{{ tournoi.numTournoi }}
+                                </td>
                                 <td>
-                                    {% if tournoi.numTournoi != idTournoisModif %}
+                                    {% if tournoi.idTournoi != idTournoisModif %}
                                     {{ tournoi.anneeTournoi }}
                                 </td>
                                 <td>
@@ -100,7 +102,7 @@
                                     {{ tournoi.libCategorie }}
                                 </td>
                                 <td>
-                                    {% if notification != 'rien' and tournoi.numTournoi == idTournoisNotif %}
+                                    {% if notification != 'rien' and tournoi.idTournoi == idTournoisNotif %}
                                         <button class="btn btn-success btn-xs"
                                                 formaction="{{ path('tournois_afficher') }}"><i
                                                     class="fa fa-check"></i> {{ notification }}</button>
@@ -116,26 +118,47 @@
                                                 class="fa fa-trash-o "></i></button>
                                 </td>
                                 {% else %}
-                                    <input type="text" id="txtLibGenre" name="txtLibGenre" size="24" required
-                                           minlength="4" maxlength="24" value="{{ tournoi.libelle }}"/>
+                                    <td>
+                                        <input type="number" id="txtAnneeTournoi" name="txtAnneeTournoi" size="10" required
+                                            min="1900" max="2099" placeholder="Année" title="Année"/>
                                     </td>
                                     <td>
-                                        <!--<?php afficherListe($tbMembres, 'lstPersonnes', 1, $tournoi->idGerant); ?>-->
-                                        {% set tbObjets, name, size, idSelect = tbMembres, 'lstPersonnes', 1, tournoi.idGerant %}
+                                        <input type="text" id="txtNomTournoi" name="txtNomTournoi" size="20"
+                                            required minlength="1" maxlength="50" placeholder="Nom"
+                                            title="De 1 à 50 caractères"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" id="txtNbParticipantsTournoi" name="txtNbParticipantsTournoi" size="8"
+                                            required min="1" maxlength="99" placeholder="Nb participants"
+                                            title="De 1 à 99"/>
+                                    </td>
+                                    <td>
+                                        {% block liste_jv_edit %}
+                                            {% set tbObjects, name, size, idSelect, valueKey, nameKey =
+                                                    tbJeuxVideo, 'lstJeux', 1, '', 'reference', 'nom' %}
+                                            {{ include('liste.html.twig') }}
+                                        {% endblock %}
+                                    </td>
+                                    <td>
+                                        <input size=15 disabled/>
+                                    </td>
+                                    <td>
+                                        {% set tbObjects, name, size, idSelect = tbFormats, 'lstFormats', 1, '' %}
                                         {{ include('liste.html.twig') }}
                                     </td>
                                     <td>
-                                        {{ tournoi.nbJeuxGenre }}
+                                        {% set tbObjects, name, size, idSelect = tbCategories, 'lstCategories', 1, '' %}
+                                        {{ include('liste.html.twig') }}
                                     </td>
                                     <td>
                                         <button class="btn btn-primary btn-xs" type="submit" name="cmdAction"
-                                                value="validerModifierGenre" title="Enregistrer"
+                                                value="validerModifierTournois" title="Enregistrer"
                                                 formaction="{{ path('tournois_validerModifier') }}"><i
                                                     class="fa fa-save"></i></button>
                                         <button class="btn btn-info btn-xs" type="reset" title="Effacer la saisie"><i
                                                     class="fa fa-eraser"></i></button>
                                         <button class="btn btn-warning btn-xs" type="submit" name="cmdAction"
-                                                value="annulerModifierGenre" title="Annuler"
+                                                value="annulerModifierTournois" title="Annuler"
                                                 formaction="{{ path('tournois_afficher') }}"><i class="fa fa-undo"></i>
                                         </button>
                                     </td>

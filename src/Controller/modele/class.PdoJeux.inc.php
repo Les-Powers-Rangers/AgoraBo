@@ -970,7 +970,8 @@ class PdoJeux
 
     public function getLesTournois()
     {
-        $requete = "SELECT tournoi.numTournoi,
+        $requete = "SELECT tournoi.idTournoi,
+                           tournoi.numTournoi,
                            tournoi.anneeTournoi,
                            tournoi.nomTournoi,
                            tournoi.nbParticipants,
@@ -996,7 +997,7 @@ class PdoJeux
         }
     }
 
-    public function getLeTournoi($annee, $numTournoi)
+    public function getLeTournoi($idTournoi)
     {
         try {
             // Requete tournoi
@@ -1007,10 +1008,9 @@ class PdoJeux
                                                         JOIN plateforme AS PL on JV.idPlateforme = PL.idPlateforme
                                                         NATURAL JOIN format AS F
                                                         JOIN personne AS P on T.idJuge = P.idPersonne
-                                                        WHERE T.anneeTournoi = :annee and numTournoi = :numTournoi');
+                                                        WHERE T.idTournoi = :idTournoi');
 
-            $requeteTournoi->bindParam(':annee', $annee, PDO::PARAM_INT);
-            $requeteTournoi->bindParam(':numTournoi', $numTournoi, PDO::PARAM_INT);
+            $requeteTournoi->bindParam(':idTournoi', $idTournoi, PDO::PARAM_INT);
             $requeteTournoi->execute();
             $tbTournoi = $requeteTournoi->fetchAll();
             // Requete equipement
@@ -1057,7 +1057,7 @@ class PdoJeux
     public function ajouterTournoi($objTournoi)
     {
         try {
-            $requete_prepare = PdoJeux::$monPdo->prepare('INSERT INTO Tournoi (anneeTournoi, numTournoi, nomTournoi, nbParticipants, gain, refJeu, idFormat, idJuge, idCategorie)
+            $requete_prepare = PdoJeux::$monPdo->prepare('INSERT INTO tournoi (anneeTournoi, numTournoi, nomTournoi, nbParticipants, gain, refJeu, idFormat, idJuge, idCategorie)
                                                         VALUES ( :annee, :numTournoi, :nomTournoi, :nbParticipants, :gain, :refJeu, :idFormat, :idJuge, :idCategorie)');
             $requete_prepare->bindParam(':annee', $objTournoi->AnneeTournoi, Pdo::PARAM_INT);
             $requete_prepare->bindParam(':numTournoi', $objTournoi->NumeroTournoi, Pdo::PARAM_INT);
@@ -1088,7 +1088,7 @@ class PdoJeux
 //                $requeteAnimateur->execute();
 //            }
 
-            return $objTournoi->NumeroTournoi;
+            return PdoJeux::$monPdo->lastInsertId();
         } catch (PDOException $e) {
             die('<div class = "erreur">Erreur dans la requête !<p>'
                 . $e->getmessage() . '</p></div>');
@@ -1100,7 +1100,8 @@ class PdoJeux
         // try {
         $requete_prepare = PdoJeux::$monPdo->prepare('UPDATE tournoi
                                                             SET nomTournoi = :nomTournoi, nbParticipants = :nbParticipants, gain = :gain, refJeu = :refJeu, idFormat = :idFormat, idJuge = :idJuge, idCategorie :idCategorie
-                                                            WHERE anneeTournoi = :annee and numTournoi = :numTournoi');
+                                                            WHERE idTournoi = :idTournoi');
+        $requete_prepare->bindParam(':idTournoi', $objTournoi->idTournoi, Pdo::PARAM_INT);
         $requete_prepare->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
         $requete_prepare->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
         $requete_prepare->bindParam(':nomTournoi', $objTournoi->NomTournoi, Pdo::PARAM_STR);
@@ -1114,91 +1115,85 @@ class PdoJeux
 
         // Suppression des animateurs déjà enregistrer
         $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM animateurtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-        $requete_prepare->bindParam(':anneeTournoi', $objTournoi->Annee, PDO::PARAM_INT);
-        $requete_prepare->bindParam(':numTournoi', $objTournoi->Numero, PDO::PARAM_INT);
+                                                            WHERE idTournoi = :idTournoi");
+        $requete_prepare->bindParam(':idTournoi', $objTournoi->idTournoi, PDO::PARAM_INT);
         $requete_prepare->execute();
 
         // Création des animateurs
         foreach ($objTournoi->Animateurs as $animateur) {
-            $requeteAnimateur = PdoJeux::$monPdo->prepare('INSERT INTO animateurtournoi (anneeTournoi, numTournoi, idPersonne) VALUES
-                                                                (:annee, :numTournoi, :idPersonne)');
-            $requeteAnimateur->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
-            $requeteAnimateur->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
+            $requeteAnimateur = PdoJeux::$monPdo->prepare('INSERT INTO animateurtournoi (idTournoi, idPersonne) VALUES
+                                                                (:idTournoi, :idPersonne)');
+            $requeteAnimateur->bindParam(':idTournoi', $objTournoi->idTournoi, Pdo::PARAM_INT);
             $requeteAnimateur->bindParam(':idPersonne', $animateur, Pdo::PARAM_INT);
             $requeteAnimateur->execute();
         }
 
-        foreach ($objTournoi->Journees as $journee) {
-            $requeteJournee = PdoJeux::$monPdo->prepare('INSERT INTO journee (anneeTournoi, numTournoi, dateJournee, heureDebut, heureFin) VALUES
-                                                           (:annee, :numTournoi, :dateJournee, :heureDebut, :heureFin)');
-            $requeteJournee->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
-            $requeteJournee->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
-            $requeteJournee->bindParam(':dateJournee', $journee->date, Pdo::PARAM_STR);
-            $requeteJournee->bindParam(':heureDebut', $journee->heureDebut, Pdo::PARAM_STR);
-            $requeteJournee->bindParam(':heureFin', $journee->heureFin, Pdo::PARAM_STR);
-            $requeteJournee->execute();
-        }
+        // foreach ($objTournoi->Journees as $journee) {
+        //     $requeteJournee = PdoJeux::$monPdo->prepare('INSERT INTO journee (anneeTournoi, numTournoi, dateJournee, heureDebut, heureFin) VALUES
+        //                                                    (:annee, :idTournoi, :dateJournee, :heureDebut, :heureFin)');
+        //     $requeteJournee->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
+        //     $requeteJournee->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
+        //     $requeteJournee->bindParam(':dateJournee', $journee->date, Pdo::PARAM_STR);
+        //     $requeteJournee->bindParam(':heureDebut', $journee->heureDebut, Pdo::PARAM_STR);
+        //     $requeteJournee->bindParam(':heureFin', $journee->heureFin, Pdo::PARAM_STR);
+        //     $requeteJournee->execute();
+        // }
 
-        // Suppression des équipements
-        $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM equipementtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-        $requete_prepare->bindParam(':anneeTournoi', $objTournoi->Annee, PDO::PARAM_INT);
-        $requete_prepare->bindParam(':numTournoi', $objTournoi->Numero, PDO::PARAM_INT);
-        $requete_prepare->execute();
+        // // Suppression des équipements
+        // $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM equipementtournoi 
+        //                                                     WHERE idTournoi = :idTournoi");
+        // $requete_prepare->bindParam(':idTournoi', $objTournoi->idTournoi, PDO::PARAM_INT);
+        // $requete_prepare->execute();
 
-        // Suppression des journées
-        $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM journee 
-                                                            WHERE numTournoi = :numTournoi");
-        $requete_prepare->bindParam(':numTournoi', $objTournoi->Numero, PDO::PARAM_INT);
-        $requete_prepare->execute();
+        // // Suppression des journées
+        // $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM journee 
+        //                                                     WHERE numTournoi = :numTournoi");
+        // $requete_prepare->bindParam(':numTournoi', $objTournoi->Numero, PDO::PARAM_INT);
+        // $requete_prepare->execute();
 
-        // Création des journées
-        foreach ($objTournoi->Journees as $journee) {
-            $requeteJournee = PdoJeux::$monPdo->prepare('INSERT INTO journee (anneeTournoi, numTournoi, dateJournee, heureDebut, heureFin) VALUES
-                                                           (:annee, :numTournoi, :dateJournee, :heureDebut, :heureFin)');
-            $requeteJournee->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
-            $requeteJournee->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
-            $requeteJournee->bindParam(':dateJournee', $journee->date, Pdo::PARAM_STR);
-            $requeteJournee->bindParam(':heureDebut', $journee->heureDebut, Pdo::PARAM_STR);
-            $requeteJournee->bindParam(':heureFin', $journee->heureFin, Pdo::PARAM_STR);
-            $requeteJournee->execute();
-        }
+        // // Création des journées
+        // foreach ($objTournoi->Journees as $journee) {
+        //     $requeteJournee = PdoJeux::$monPdo->prepare('INSERT INTO journee (anneeTournoi, numTournoi, dateJournee, heureDebut, heureFin) VALUES
+        //                                                    (:annee, :numTournoi, :dateJournee, :heureDebut, :heureFin)');
+        //     $requeteJournee->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
+        //     $requeteJournee->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
+        //     $requeteJournee->bindParam(':dateJournee', $journee->date, Pdo::PARAM_STR);
+        //     $requeteJournee->bindParam(':heureDebut', $journee->heureDebut, Pdo::PARAM_STR);
+        //     $requeteJournee->bindParam(':heureFin', $journee->heureFin, Pdo::PARAM_STR);
+        //     $requeteJournee->execute();
+        // }
 
-        // Création des équipements
-        foreach ($objTournoi->Equipements as $equipement) {
-            $requeteAnimateur = PdoJeux::$monPdo->prepare('INSERT INTO equipementtournoi (anneeTournoi, numTournoi, refEquipement) VALUES
-                                                                (:annee, :numTournoi, :refEquipement)');
-            $requeteAnimateur->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
-            $requeteAnimateur->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
-            $requeteAnimateur->bindParam(':refEquipement', $equipement, Pdo::PARAM_STR);
-            $requeteAnimateur->execute();
-        }
+        // // Création des équipements
+        // foreach ($objTournoi->Equipements as $equipement) {
+        //     $requeteAnimateur = PdoJeux::$monPdo->prepare('INSERT INTO equipementtournoi (anneeTournoi, numTournoi, refEquipement) VALUES
+        //                                                         (:annee, :numTournoi, :refEquipement)');
+        //     $requeteAnimateur->bindParam(':annee', $objTournoi->Annee, Pdo::PARAM_INT);
+        //     $requeteAnimateur->bindParam(':numTournoi', $objTournoi->Numero, Pdo::PARAM_INT);
+        //     $requeteAnimateur->bindParam(':refEquipement', $equipement, Pdo::PARAM_STR);
+        //     $requeteAnimateur->execute();
+        // }
         // } catch (PDOException $e) {
         //     die('<div class = "erreur">Erreur dans la requête !<p>'
         //         .$e->getmessage().'</p></div>');
         // }
     }
 
-    public function supprimerTournoi($annee, $num)
+    public function supprimerTournoi($idTournoi)
     {
         try {
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM equipementtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
+                                                            WHERE idTournoi = :idTournoi");
+            $requete_prepare->bindParam(':idTournoi', $idTournoi, PDO::PARAM_INT);
             $requete_prepare->execute();
 
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM animateurtournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
+                                                            WHERE idTournoi = :idTournoi");
+            $requete_prepare->bindParam(':idTournoi', $idTournoi, PDO::PARAM_INT);
             $requete_prepare->execute();
 
             $requete_prepare = PdoJeux::$monPdo->prepare("DELETE FROM tournoi 
-                                                            WHERE anneeTournoi = :anneeTournoi and numTournoi = :numTournoi");
-            $requete_prepare->bindParam(':anneeTournoi', $annee, PDO::PARAM_INT);
-            $requete_prepare->bindParam(':numTournoi', $num, PDO::PARAM_INT);
+                                                            WHERE idTournoi = :idTournoi");
+            $requete_prepare->bindParam(':idTournoi', $idTournoi, PDO::PARAM_INT);
             $requete_prepare->execute();
         } catch (Exception $e) {
             die($e->getMessage());

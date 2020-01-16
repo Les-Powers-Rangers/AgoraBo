@@ -104,7 +104,7 @@ class TournoisController extends AbstractController
     public function supprimer(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->supprimerTournoi($request->request->get('txtAnneeTournoi'), $request->request->get('txtNumeroTournoi'));
+        $db->supprimerTournoi($request->request->get('txtIdTournois'));
         $this->addFlash(
             'success', 'Le tournois a été supprimé'
         );
