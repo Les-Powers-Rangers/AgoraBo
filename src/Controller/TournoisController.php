@@ -59,9 +59,21 @@ class TournoisController extends AbstractController
      */
     public function ajouter(SessionInterface $session, Request $request)
     {
+        /** @var PdoJeux $db */
         $db = PdoJeux::getPdoJeux();
-        if (!empty($request->request->get('txtLibTournois'))) {
-            $idTournoisNotif = $db->ajouterTournois($request->request->get('txtLibTournois'), $request->request->get('txtNbTournoisDispo'));
+        if (!empty($request->request->get('txtNumeroTournoi'))) {
+            // Création de l'objet
+            $objTournoi = (Object)[
+                "NumeroTournoi" => $request->request->get('txtNumeroTournoi'),
+                "AnneeTournoi" => $request->request->get('txtAnneeTournoi'),
+                "NomTournoi" => $request->request->get('txtNomTournoi'),
+                "NbParticipantsTournoi" => $request->request->get('txtNbParticipantsTournoi'),
+                "GainTournoi" => 0, //$request->request->get('txtGainTournoi'),
+                "Jeu" => $request->request->get('lstJeux'),
+                "Format" => $request->request->get('lstFormats'),
+                "Categorie" => $request->request->get('lstCategories')
+            ];
+            $idTournoisNotif = $db->ajouterTournoi($objTournoi);
             $notification = 'Ajouté';
         }
         return $this->afficherTournois($db, -1, $idTournoisNotif, $notification);
@@ -82,7 +94,7 @@ class TournoisController extends AbstractController
     public function validerModifier(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->modifierTournois($request->request->get('txtIdTournois'), $request->request->get('txtLibTournois'), $request->request->get('txtNbTournoisDispo'));
+        $db->modifierTournoi($request->request->get('txtIdTournois'), $request->request->get('txtLibTournois'), $request->request->get('txtNbTournoisDispo'));
         return $this->afficherTournois($db, -1, $request->request->get('txtIdTournois'), 'Modifié');
     }
 
@@ -92,7 +104,7 @@ class TournoisController extends AbstractController
     public function supprimer(SessionInterface $session, Request $request)
     {
         $db = PdoJeux::getPdoJeux();
-        $db->supprimerTournois($request->request->get('txtIdTournois'));
+        $db->supprimerTournoi($request->request->get('txtAnneeTournoi'), $request->request->get('txtNumeroTournoi'));
         $this->addFlash(
             'success', 'Le tournois a été supprimé'
         );
