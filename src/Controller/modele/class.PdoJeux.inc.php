@@ -978,10 +978,11 @@ class PdoJeux
                            jv.nom AS nomJV,
                            p.libPlateforme,
                            f.nomFormat,
-                           'Hugo a pas fini ¯\_(ツ)_/¯'   as libCategorie,
+                           c.libCategorie,
                            CONCAT(j.nomPersonne, ' ', j.nomPersonne) as nomJuge
                     FROM tournoi
                            LEFT JOIN format f on tournoi.idFormat = f.idFormat
+                           LEFT JOIN categorie c on tournoi.idCategorie = c.idCategorie
                            LEFT JOIN jeu_video jv on tournoi.refJeu = jv.refJeu
                            LEFT JOIN plateforme p on jv.idPlateforme = p.idPlateforme
                            LEFT JOIN personne j on tournoi.idJuge = j.idPersonne";
